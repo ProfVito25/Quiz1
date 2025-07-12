@@ -1,0 +1,24 @@
+[
+  {
+    "domanda": "What is Robinson Crusoe\u2019s real family name?",
+    "tipo": "scelta_multipla",
+    "opzioni": [
+      "Robinson",
+      "Kreutznaer",
+      "Crusader",
+      "Kramer",
+      "Kreuzberg"
+    ]
+  },
+  {
+    "domanda": "Where was Crusoe born?",
+    "tipo": "scelta_multipla",
+    "opzioni": [
+      "Bristol",
+      "York",
+      "London",
+      "Edinburgh",
+      "Bremen"
+    ]
+  }
+]

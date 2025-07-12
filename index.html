@@ -24,37 +24,38 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <script>
-    async function caricaDomande() {
-      try {
-        const [sceltaRes, apertaRes] = await Promise.all([
-          fetch('domande_scelta.json'),
-          fetch('domande_aperta.json')
-        ]);
-        const tutteScelte = await sceltaRes.json();
-        const tutteAperte = await apertaRes.json();
-
-        const scelteCasuali = tutteScelte.sort(() => 0.5 - Math.random()).slice(0, 5);
-        const apertaCasuale = tutteAperte[Math.floor(Math.random() * tutteAperte.length)];
-        const tutteDomande = [...scelteCasuali, apertaCasuale];
-
-        const quizDiv = document.getElementById('quiz');
-        tutteDomande.forEach((domanda, i) => {
-          const div = document.createElement('div');
-          div.className = 'domanda';
-          if (domanda.tipo === 'scelta_multipla') {
-            div.innerHTML = `<p>${i + 1}. ${domanda.domanda}</p>` +
-              domanda.opzioni.map(opt =>
-                `<div class="opzione"><label><input type="radio" name="q${i}" value="${opt}"> ${opt}</label></div>`
-              ).join('');
-          } else if (domanda.tipo === 'aperta') {
-            div.innerHTML = `<p>${i + 1}. ${domanda.domanda}</p><textarea name="q${i}"></textarea>`;
-          }
-          quizDiv.appendChild(div);
-        });
-      } catch (error) {
-        console.error("Errore nel caricamento delle domande:", error);
-        alert("Errore nel caricamento delle domande.");
+    const tutteDomande = [
+      {
+        "domanda": "What is Robinson Crusoe’s real family name?",
+        "tipo": "scelta_multipla",
+        "opzioni": ["Robinson", "Kreutznaer", "Crusader", "Kramer", "Kreuzberg"]
+      },
+      {
+        "domanda": "Where was Crusoe born?",
+        "tipo": "scelta_multipla",
+        "opzioni": ["Bristol", "York", "London", "Edinburgh", "Bremen"]
+      },
+      {
+        "domanda": "Describe Robinson Crusoe’s feelings upon being shipwrecked.",
+        "tipo": "aperta"
       }
+    ];
+
+    function caricaDomande() {
+      const quizDiv = document.getElementById('quiz');
+      tutteDomande.forEach((domanda, i) => {
+        const div = document.createElement('div');
+        div.className = 'domanda';
+        if (domanda.tipo === 'scelta_multipla') {
+          div.innerHTML = `<p>${i + 1}. ${domanda.domanda}</p>` +
+            domanda.opzioni.map(opt =>
+              `<div class="opzione"><label><input type="radio" name="q${i}" value="${opt}"> ${opt}</label></div>`
+            ).join('');
+        } else if (domanda.tipo === 'aperta') {
+          div.innerHTML = `<p>${i + 1}. ${domanda.domanda}</p><textarea name="q${i}"></textarea>`;
+        }
+        quizDiv.appendChild(div);
+      });
     }
 
     document.getElementById('invia').addEventListener('click', async () => {

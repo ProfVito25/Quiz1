@@ -41,7 +41,10 @@
 
         const scelteCasuali = tutteScelte.sort(() => 0.5 - Math.random()).slice(0, 80);
         const apertaCasuale = tutteAperte[Math.floor(Math.random() * tutteAperte.length)];
-        const tutteDomande = [...scelteCasuali, apertaCasuale];
+        const tutteDomande = [...scelteCasuali];
+if (apertaCasuale) {
+  tutteDomande.push(apertaCasuale);
+};
 
         const quizDiv = document.getElementById('quiz');
 

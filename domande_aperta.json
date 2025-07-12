@@ -1,6 +1,82 @@
 [
   {
-    "domanda": "Describe Robinson Crusoe’s feelings upon being shipwrecked.",
+    "domanda": "Summarise chapter 1",
+    "tipo": "aperta"
+  },
+  {
+    "domanda": "Summarise chapter 2",
+    "tipo": "aperta"
+  },
+  {
+    "domanda": "Summarise chapter 3",
+    "tipo": "aperta"
+  },
+  {
+    "domanda": "Summarise chapter 4",
+    "tipo": "aperta"
+  },
+  {
+    "domanda": "Summarise chapter 5",
+    "tipo": "aperta"
+  },
+  {
+    "domanda": "Summarise chapter 6",
+    "tipo": "aperta"
+  },
+  {
+    "domanda": "Summarise chapter 7",
+    "tipo": "aperta"
+  },
+  {
+    "domanda": "Summarise chapter 8",
+    "tipo": "aperta"
+  },
+  {
+    "domanda": "Summarise chapter 9",
+    "tipo": "aperta"
+  },
+  {
+    "domanda": "Summarise chapter 10",
+    "tipo": "aperta"
+  },
+  {
+    "domanda": "Summarise chapter 11",
+    "tipo": "aperta"
+  },
+  {
+    "domanda": "Summarise chapter 12",
+    "tipo": "aperta"
+  },
+  {
+    "domanda": "Summarise chapter 13",
+    "tipo": "aperta"
+  },
+  {
+    "domanda": "Summarise chapter 14",
+    "tipo": "aperta"
+  },
+  {
+    "domanda": "Summarise chapter 15",
+    "tipo": "aperta"
+  },
+  {
+    "domanda": "Summarise chapter 16",
+    "tipo": "aperta"
+  },
+  {
+    "domanda": "Summarise chapter 17",
+    "tipo": "aperta"
+  },
+  {
+    "domanda": "Summarise chapter 18",
+    "tipo": "aperta"
+  },
+  {
+    "domanda": "Summarise chapter 19",
+    "tipo": "aperta"
+  },
+  {
+    "domanda": "Summarise chapter 20",
     "tipo": "aperta"
   }
 ]

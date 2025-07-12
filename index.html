@@ -11,7 +11,11 @@
     .opzione { margin: 4px 0; }
     textarea { width: 100%; height: 100px; margin-top: 10px; }
     #invia { margin-top: 30px; padding: 10px 20px; font-size: 16px; }
-    #contenutoPdf { display: none; }
+
+    /* PDF container nascosto di default */
+    #contenutoPdf {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -19,8 +23,10 @@
   <div id="quiz"></div>
   <button id="invia">INVIA</button>
 
+  <!-- Contenitore PDF -->
   <div id="contenutoPdf"></div>
 
+  <!-- Libreria per il salvataggio PDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <script>
@@ -33,14 +39,16 @@
         const tutteScelte = await sceltaRes.json();
         const tutteAperte = await apertaRes.json();
 
-        const scelteCasuali = tutteScelte.sort(() => 0.5 - Math.random()).slice(0, 5);
+        const scelteCasuali = tutteScelte.sort(() => 0.5 - Math.random()).slice(0, 80);
         const apertaCasuale = tutteAperte[Math.floor(Math.random() * tutteAperte.length)];
         const tutteDomande = [...scelteCasuali, apertaCasuale];
 
         const quizDiv = document.getElementById('quiz');
+
         tutteDomande.forEach((domanda, i) => {
           const div = document.createElement('div');
           div.className = 'domanda';
+
           if (domanda.tipo === 'scelta_multipla') {
             div.innerHTML = `<p>${i + 1}. ${domanda.domanda}</p>` +
               domanda.opzioni.map(opt =>
@@ -49,6 +57,7 @@
           } else if (domanda.tipo === 'aperta') {
             div.innerHTML = `<p>${i + 1}. ${domanda.domanda}</p><textarea name="q${i}"></textarea>`;
           }
+
           quizDiv.appendChild(div);
         });
       } catch (error) {
@@ -57,10 +66,10 @@
       }
     }
 
+    // Salva le risposte in PDF
     document.getElementById('invia').addEventListener('click', async () => {
       const contenitore = document.getElementById('contenutoPdf');
       contenitore.innerHTML = "<h2>Risposte del quiz</h2>";
-      contenitore.style.display = 'block';
 
       const domande = document.querySelectorAll('.domanda');
       domande.forEach((d, i) => {
@@ -70,13 +79,18 @@
         contenitore.innerHTML += `<p><strong>${i + 1}. ${testoDomanda}</strong><br>Risposta: ${risposta}</p>`;
       });
 
-      await new Promise(r => setTimeout(r, 100)); // attende il rendering
+      // Mostra il contenuto visibile per il PDF
+      contenitore.style.display = 'block';
+
+      // Aspetta un attimo per garantire il rendering
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       const nomeFile = prompt("Inserisci il nome del file PDF:");
       if (nomeFile) {
         await html2pdf().from(contenitore).save(nomeFile + ".pdf");
       }
 
+      // Nasconde di nuovo il contenitore dopo il salvataggio
       contenitore.style.display = 'none';
     });
 

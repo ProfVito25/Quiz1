@@ -86,8 +86,8 @@ if (apertaCasuale) {
       contenitore.style.display = 'block';
 
       // Aspetta un attimo per garantire il rendering
-      await new Promise(resolve => setTimeout(resolve, 600));
-
+      await new Promise(resolve => setTimeout(resolve, 1500)); // o anche 1000 ms
+      
       const nomeFile = prompt("Inserisci il nome del file PDF:");
       if (nomeFile) {
         await html2pdf().from(contenitore).save(nomeFile + ".pdf");

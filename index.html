@@ -16,7 +16,7 @@
 <body>
   <h1>Quiz Robinson Crusoe</h1>
   <div id="quiz"></div>
-  <button id="invia">INVIA</button>
+  <button onclick="window.print()">STAMPA</button>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
@@ -63,7 +63,7 @@
         contenuto.innerHTML += `<p><strong>${i + 1}. ${testoDomanda}</strong><br>Risposta: ${risposta}</p>`;
       });
 
-      const nomeFile = prompt("Inserisci il nome del file PDF:");
+      const nomeFile = prompt("Inserisci il tuo nome:");
       if (nomeFile) {
         html2pdf().from(contenuto).save(nomeFile + ".pdf");
       }

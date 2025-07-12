@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Quiz Robinson Crusoe</title>
@@ -11,11 +11,6 @@
     .opzione { margin: 4px 0; }
     textarea { width: 100%; height: 100px; margin-top: 10px; }
     #invia { margin-top: 30px; padding: 10px 20px; font-size: 16px; }
-
-    /* PDF container nascosto di default */
-    #contenutoPdf {
-      display: none;
-    }
   </style>
 </head>
 <body>
@@ -23,87 +18,58 @@
   <div id="quiz"></div>
   <button id="invia">INVIA</button>
 
-  <!-- Contenitore PDF -->
-  <div id="contenutoPdf"></div>
-
-  <!-- Libreria per il salvataggio PDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
   <script>
     async function caricaDomande() {
-      try {
-        const [sceltaRes, apertaRes] = await Promise.all([
-          fetch('domande_scelta.json'),
-          fetch('domande_aperta.json')
-        ]);
-        const tutteScelte = await sceltaRes.json();
-        const tutteAperte = await apertaRes.json();
+      const [sceltaRes, apertaRes] = await Promise.all([
+        fetch('domande_scelta.json'),
+        fetch('domande_aperta.json')
+      ]);
+      const tutteScelte = await sceltaRes.json();
+      const tutteAperte = await apertaRes.json();
 
-        const scelteCasuali = tutteScelte.sort(() => 0.5 - Math.random()).slice(0, 80);
-        const apertaCasuale = tutteAperte[Math.floor(Math.random() * tutteAperte.length)];
-        const tutteDomande = [...scelteCasuali];
-if (apertaCasuale) {
-  tutteDomande.push(apertaCasuale);
-}
+      const scelteCasuali = tutteScelte.sort(() => 0.5 - Math.random()).slice(0, 80);
+      const apertaCasuale = tutteAperte[Math.floor(Math.random() * tutteAperte.length)];
 
-        const quizDiv = document.getElementById('quiz');
+      const tutteDomande = [...scelteCasuali, apertaCasuale];
+      const quizDiv = document.getElementById('quiz');
 
-        tutteDomande.forEach((domanda, i) => {
-          const div = document.createElement('div');
-          div.className = 'domanda';
+      tutteDomande.forEach((domanda, i) => {
+        const div = document.createElement('div');
+        div.className = 'domanda';
 
-          if (domanda.tipo === 'scelta_multipla') {
-            div.innerHTML = `<p>${i + 1}. ${domanda.domanda}</p>` +
-              domanda.opzioni.map(opt =>
-                `<div class="opzione"><label><input type="radio" name="q${i}" value="${opt}"> ${opt}</label></div>`
-              ).join('');
-          } else if (domanda.tipo === 'aperta') {
-            div.innerHTML = `<p>${i + 1}. ${domanda.domanda}</p><textarea name="q${i}"></textarea>`;
-          }
+        if (domanda.tipo === 'scelta_multipla') {
+          div.innerHTML = `<p>${i + 1}. ${domanda.domanda}</p>` +
+            domanda.opzioni.map(opt =>
+              `<div class="opzione"><label><input type="radio" name="q${i}" value="${opt}"> ${opt}</label></div>`
+            ).join('');
+        } else if (domanda.tipo === 'aperta') {
+          div.innerHTML = `<p>${i + 1}. ${domanda.domanda}</p><textarea name="q${i}"></textarea>`;
+        }
 
-          quizDiv.appendChild(div);
-        });
-      } catch (error) {
-        console.error("Errore nel caricamento delle domande:", error);
-        alert("Errore nel caricamento delle domande.");
-      }
+        quizDiv.appendChild(div);
+      });
     }
 
-    // Salva le risposte in PDF
-    document.getElementById('invia').addEventListener('click', async () => {
-  const contenitore = document.getElementById('contenutoPdf');
-  contenitore.innerHTML = "<h2>Risposte del quiz</h2>";
+    document.getElementById('invia').addEventListener('click', () => {
+      const contenuto = document.createElement('div');
+      contenuto.innerHTML = "<h2>Risposte del quiz</h2>";
 
-  const domande = document.querySelectorAll('.domanda');
-  domande.forEach((d, i) => {
-    const testoDomanda = d.querySelector('p')?.innerText || `[Domanda ${i + 1}]`;
-    const risposta = d.querySelector('input[type="radio"]:checked')?.value ||
-                     d.querySelector('textarea')?.value?.trim() || "[Nessuna risposta]";
-    
-    contenitore.innerHTML += `<p><strong>${i + 1}. ${testoDomanda}</strong><br>Risposta: ${risposta}</p>`;
-  });
+      const domande = document.querySelectorAll('.domanda');
+      domande.forEach((d, i) => {
+        const testoDomanda = d.querySelector('p').innerText;
+        const risposta = d.querySelector('input[type="radio"]:checked')?.value ||
+                         d.querySelector('textarea')?.value || "[Nessuna risposta]";
+        contenuto.innerHTML += `<p><strong>${i + 1}. ${testoDomanda}</strong><br>Risposta: ${risposta}</p>`;
+      });
 
-  // DEBUG: Mostra il contenuto nella console
-  console.log("Contenuto PDF:", contenitore.innerHTML);
+      const nomeFile = prompt("Inserisci il nome del file PDF:");
+      if (nomeFile) {
+        html2pdf().from(contenuto).save(nomeFile + ".pdf");
+      }
+    });
 
-  // Rendi il contenitore visibile per il rendering
-  contenitore.style.display = 'block';
-
-  // Aspetta il prossimo ciclo di rendering
-  await new Promise(resolve => requestAnimationFrame(resolve));
-
-  // Salvataggio in PDF
-  const nomeFile = prompt("Inserisci il nome del file PDF:");
-  if (nomeFile) {
-    await html2pdf().set({
-      margin: 10,
-      filename: nomeFile + ".pdf",
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    }).from(contenitore).save();
-  }
-
-  // Nasconde di nuovo il contenitore
-  contenitore.style.display = 'none';
-});
+    caricaDomande();
+  </script>
+</body>
+</html>
